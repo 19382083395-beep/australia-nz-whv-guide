@@ -37,7 +37,7 @@
             position: sticky; top: 0; z-index: 100; margin-bottom: 2.5rem;
         }
         .nav ul { list-style: none; display: flex; justify-content: center; flex-wrap: wrap; padding: 1.3rem; gap: 2.2rem; }
-        .nav a { text-decoration: none; color: var(--primary); font-weight: 600; font-size: 1.1rem; padding: 12px 24px; border-radius: 50px; transition: all 0.3s; }
+        .nav a { text-decoration: none; color: var(--primary); font-weight: 600; font-size: 1.1rem; padding: 12px 24px; border-radius: 50px; transition: all 0.3s; white-space: nowrap; }
         .nav a:hover { background: #f0f7ff; transform: translateY(-2px); }
 
         .section { background: white; margin-bottom: 3rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); overflow: hidden; }
@@ -85,6 +85,43 @@
         textarea { min-height: 96px; resize: vertical; }
         .pill { display: inline-block; padding: .35rem .8rem; border-radius: 999px; background: #e6f3ff; color: var(--primary); font-weight: 700; margin: .25rem .25rem .25rem 0; }
         .danger-pill { background: #fee2e2; color: var(--danger); }
+
+        @media (max-width: 720px) {
+            body { font-size: 15.5px; }
+            header { padding: 2.5rem 1rem 2rem; }
+            header h1 { font-size: 1.9rem; line-height: 1.25; }
+            header p { font-size: 1rem; }
+            .container { padding: 1.25rem .85rem; }
+            .nav { margin-bottom: 1.25rem; overflow: hidden; }
+            .nav ul {
+                flex-wrap: nowrap;
+                justify-content: flex-start;
+                gap: .5rem;
+                padding: .65rem .85rem;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            .nav ul::-webkit-scrollbar { display: none; }
+            .nav li { flex: 0 0 auto; }
+            .nav a {
+                display: block;
+                font-size: .9rem;
+                padding: .48rem .78rem;
+                background: #f0f7ff;
+                border: 1px solid #dbeafe;
+            }
+            .nav a:hover { transform: none; }
+            .section { margin-bottom: 1.25rem; border-radius: 16px; }
+            .accordion-header { padding: 1rem 1.1rem; font-size: 1.08rem; gap: .75rem; }
+            .accordion-content.open { padding: 1.1rem; }
+            .highlight, .highlight-red, .warning { padding: 1rem; margin: 1rem 0; }
+            .hero-image { height: 210px; }
+            .task-row { grid-template-columns: 28px 1fr; gap: .7rem; padding: .85rem; }
+            .task-row .minutes { grid-column: 2; justify-self: start; font-size: .9rem; }
+            th, td { padding: 11px 10px; }
+        }
+
     </style>
 </head>
 <body>
