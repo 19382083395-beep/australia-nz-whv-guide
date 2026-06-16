@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Australia & New Zealand WHV + HVAC职业转型指南</title>
+    <title>PTE 42分每日打卡 · WHV语言备考工具</title>
     <style>
         :root {
             --primary: #0066cc;
             --primary-light: #00aaff;
+            --success: #16a34a;
+            --warning: #f59e0b;
+            --danger: #dc2626;
+            --ink: #1e293b;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
@@ -63,16 +67,45 @@
         footer { background: #1e2937; color: #cbd5e1; text-align: center; padding: 3.5rem 1rem; margin-top: 5rem; }
         .flag { font-size: 2.3rem; margin-right: 14px; vertical-align: middle; }
         .industry { color: #0066cc; font-weight: 700; }
+        .pte-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+        .pte-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.25rem; }
+        .pte-card h4 { color: var(--ink); margin-bottom: .5rem; }
+        .score-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 64px; height: 64px; border-radius: 50%; background: #e6f3ff; color: var(--primary); font-size: 1.55rem; font-weight: 800; margin-bottom: .8rem; }
+        .tracker { display: grid; gap: 1rem; }
+        .task-row { display: grid; grid-template-columns: 34px 1fr auto; align-items: center; gap: .9rem; background: white; border: 1px solid #e2e8f0; border-radius: 14px; padding: 1rem; }
+        .task-row input { width: 22px; height: 22px; accent-color: var(--success); }
+        .task-row small { color: #64748b; display: block; }
+        .minutes { color: var(--primary); font-weight: 700; white-space: nowrap; }
+        .progress-wrap { background: #e2e8f0; border-radius: 999px; height: 16px; overflow: hidden; margin: .8rem 0; }
+        .progress-bar { background: linear-gradient(90deg, var(--success), var(--primary-light)); height: 100%; width: 0%; transition: width .3s ease; }
+        .status-line { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; font-weight: 700; color: var(--ink); }
+        .input-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin: 1rem 0; }
+        .input-row label { font-weight: 700; color: var(--ink); }
+        .input-row input, .input-row select, textarea { width: 100%; margin-top: .35rem; padding: .85rem; border: 1px solid #cbd5e1; border-radius: 12px; font: inherit; }
+        textarea { min-height: 96px; resize: vertical; }
+        .pill { display: inline-block; padding: .35rem .8rem; border-radius: 999px; background: #e6f3ff; color: var(--primary); font-weight: 700; margin: .25rem .25rem .25rem 0; }
+        .danger-pill { background: #fee2e2; color: var(--danger); }
+        .share-box { background: #f8fafc; border: 1px dashed var(--primary); border-radius: 16px; padding: 1.2rem; margin-top: 1rem; }
+        .share-row { display: grid; grid-template-columns: 1fr auto; gap: .8rem; align-items: center; }
+        .share-row input { width: 100%; padding: .85rem; border: 1px solid #cbd5e1; border-radius: 12px; font: inherit; color: var(--ink); background: white; }
+        .copy-status { color: var(--success); font-weight: 700; margin-top: .5rem; min-height: 1.5rem; }
+        @media (max-width: 680px) {
+            .share-row { grid-template-columns: 1fr; }
+            .task-row { grid-template-columns: 28px 1fr; }
+            .minutes { grid-column: 2; }
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1><span class="flag">🇦🇺</span> Australia & <span class="flag">🇳🇿</span> New Zealand WHV + HVAC职业转型指南</h1>
-        <p>24岁转行者专属规划 · 从WHV到长期居留完整路径（2026最新）</p>
+        <h1>🎯 PTE 42分每日打卡软件</h1>
+        <p>面向澳新WHV/技术路径的快速出分训练 · 每天90分钟 · 目标总分42+ 且单项不拖后腿</p>
     </header>
 
     <div class="nav">
         <ul>
+            <li><a href="#pte-app">🎯 PTE打卡</a></li>
+            <li><a href="#pte-plan">⚡ 快速出分计划</a></li>
             <li><a href="#whv-intro">📘 WHV介绍</a></li>
             <li><a href="#aus">🇦🇺 Australia WHV</a></li>
             <li><a href="#nz">🇳🇿 New Zealand WHV</a></li>
@@ -82,6 +115,73 @@
     </div>
 
     <div class="container">
+
+        <div class="section" id="pte-app">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <span>🎯 PTE 42分每日打卡软件</span>
+            </div>
+            <div class="accordion-content">
+                <div class="highlight">
+                    <strong>使用方法：</strong>每天按顺序完成下面 6 个任务，勾选后会自动保存到本机浏览器。连续打卡 14 天，重点冲刺 Read Aloud、Repeat Sentence、Describe Image、Write From Dictation。
+                </div>
+
+                <div class="status-line">
+                    <span>今日完成度：<span id="completionText">0%</span></span>
+                    <span>连续打卡：<span id="streakText">0</span> 天</span>
+                    <span>今日建议：<span id="todayAdvice">先完成高频口语题</span></span>
+                </div>
+                <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+                <div class="tracker" id="taskList">
+                    <label class="task-row"><input type="checkbox" data-task="warmup"><span><strong>口语热身 + 发音纠错</strong><small>跟读高频句，录音回听，保证清晰度和流利度。</small></span><span class="minutes">10分钟</span></label>
+                    <label class="task-row"><input type="checkbox" data-task="ra"><span><strong>Read Aloud 20题</strong><small>优先练停顿、重音、不要回读；这是42分最稳的基础分。</small></span><span class="minutes">20分钟</span></label>
+                    <label class="task-row"><input type="checkbox" data-task="rs"><span><strong>Repeat Sentence 30题</strong><small>听关键词 + 复述节奏；不会的用核心词补齐。</small></span><span class="minutes">20分钟</span></label>
+                    <label class="task-row"><input type="checkbox" data-task="di"><span><strong>Describe Image 8题</strong><small>固定模板：标题、最高最低、趋势、总结，追求稳定输出。</small></span><span class="minutes">15分钟</span></label>
+                    <label class="task-row"><input type="checkbox" data-task="wfd"><span><strong>Write From Dictation 25题</strong><small>逐词拼写和复数检查；这是听力和写作的提分快项。</small></span><span class="minutes">20分钟</span></label>
+                    <label class="task-row"><input type="checkbox" data-task="review"><span><strong>错题复盘</strong><small>记录今天最容易丢分的3个问题，明天优先修正。</small></span><span class="minutes">5分钟</span></label>
+                </div>
+
+                <div class="input-row">
+                    <label>目标考试日期<input type="date" id="examDate"></label>
+                    <label>今日模考分<input type="number" id="mockScore" min="10" max="90" placeholder="例如 38"></label>
+                    <label>最弱单项<select id="weakSkill"><option>口语 Speaking</option><option>听力 Listening</option><option>阅读 Reading</option><option>写作 Writing</option></select></label>
+                </div>
+                <label><strong>今日复盘笔记</strong><textarea id="dailyNote" placeholder="例：RS漏词严重；WFD复数s经常忘；明天先练WFD。"></textarea></label>
+                <div class="share-box">
+                    <strong>生成你的专属学习链接</strong>
+                    <p>把目标考试日期、模考分和最弱单项写进链接，复制后可收藏或发给学习搭子；每日勾选进度仍只保存在你自己的浏览器。</p>
+                    <div class="share-row">
+                        <input id="shareLink" type="text" readonly placeholder="点击右侧按钮生成链接">
+                        <a class="btn" href="javascript:void(0)" onclick="generateStudyLink()">生成链接</a>
+                    </div>
+                    <div class="copy-status" id="copyStatus" aria-live="polite"></div>
+                </div>
+                <a class="btn" href="javascript:void(0)" onclick="resetToday()">重置今日打卡</a>
+            </div>
+        </div>
+
+        <div class="section" id="pte-plan">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <span>⚡ PTE 42分快速出分计划</span>
+            </div>
+            <div class="accordion-content">
+                <div class="pte-grid">
+                    <div class="pte-card"><div class="score-badge">42</div><h4>最低目标</h4><p>以42+为目标时，策略是避免单项短板，优先拿机器容易稳定识别的题型分。</p></div>
+                    <div class="pte-card"><div class="score-badge">14</div><h4>冲刺周期</h4><p>每天90分钟，连续14天形成肌肉记忆；第7天和第14天做完整模考。</p></div>
+                    <div class="pte-card"><div class="score-badge">4</div><h4>核心题型</h4><p>Read Aloud、Repeat Sentence、Describe Image、Write From Dictation 是快速提分核心。</p></div>
+                </div>
+                <h3>每日时间分配</h3>
+                <table>
+                    <thead><tr><th>模块</th><th>训练内容</th><th>目的</th></tr></thead>
+                    <tbody>
+                        <tr><td>口语</td><td>RA + RS + DI</td><td>提高流利度、发音清晰度和模板稳定性</td></tr>
+                        <tr><td>听写</td><td>WFD 高频句</td><td>同时拉动听力和写作</td></tr>
+                        <tr><td>复盘</td><td>错题、漏词、拼写、卡顿记录</td><td>把重复错误压到最低</td></tr>
+                    </tbody>
+                </table>
+                <p><span class="pill">不要裸考</span><span class="pill">每天录音</span><span class="pill">固定模板</span><span class="pill danger-pill">少刷低收益题</span></p>
+            </div>
+        </div>
 
         <div class="section" id="whv-intro">
             <img src="https://picsum.photos/id/1015/2000/400" alt="WHV" class="hero-image">
@@ -173,8 +273,8 @@
     </div>
 
     <footer>
-        <p>本网站仅供参考，请以官方移民局最新信息为准 | 最后更新：2026年6月</p>
-        <p>祝你顺利入行HVAC，在New Zealand实现职业转型和长期居留！✈️🔧</p>
+        <p>本工具用于PTE备考打卡与WHV规划参考 | 最后更新：2026年6月</p>
+        <p>祝你尽快拿到PTE 42+，顺利推进澳新WHV与职业转型计划！✈️🎯</p>
     </footer>
 
     <script>
@@ -188,7 +288,111 @@
                 header.classList.add('active');
             }
         }
-        window.onload = () => document.querySelector('#hvac .accordion-header').click();
+        const todayKey = new Date().toISOString().slice(0, 10);
+        const storageKey = `pte-checkin-${todayKey}`;
+        const profileKey = 'pte-checkin-profile';
+
+        function loadTracker() {
+            applyPlanFromUrl();
+            const saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
+            const profile = JSON.parse(localStorage.getItem(profileKey) || '{}');
+            document.querySelectorAll('#taskList input[type="checkbox"]').forEach(input => {
+                input.checked = Boolean(saved[input.dataset.task]);
+                input.addEventListener('change', saveTracker);
+            });
+            ['examDate', 'mockScore', 'weakSkill', 'dailyNote'].forEach(id => {
+                const el = document.getElementById(id);
+                if (!el.value && profile[id]) el.value = profile[id];
+                el.addEventListener('input', saveProfile);
+            });
+            updateProgress();
+        }
+
+        function applyPlanFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            const urlPlan = {
+                examDate: params.get('examDate') || '',
+                mockScore: params.get('mockScore') || '',
+                weakSkill: params.get('weakSkill') || ''
+            };
+            Object.entries(urlPlan).forEach(([id, value]) => {
+                if (value && document.getElementById(id)) document.getElementById(id).value = value;
+            });
+        }
+
+        function generateStudyLink() {
+            const url = new URL(window.location.href);
+            const fields = ['examDate', 'mockScore', 'weakSkill'];
+            fields.forEach(id => {
+                const value = document.getElementById(id).value;
+                if (value) url.searchParams.set(id, value);
+                else url.searchParams.delete(id);
+            });
+            url.hash = 'pte-app';
+            const link = url.toString();
+            const shareLink = document.getElementById('shareLink');
+            const copyStatus = document.getElementById('copyStatus');
+            shareLink.value = link;
+            shareLink.select();
+            navigator.clipboard?.writeText(link).then(() => {
+                copyStatus.textContent = '链接已复制，可以直接发送给学习搭子。';
+            }).catch(() => {
+                copyStatus.textContent = '链接已生成，请手动复制。';
+            });
+        }
+
+        function saveTracker() {
+            const data = {};
+            document.querySelectorAll('#taskList input[type="checkbox"]').forEach(input => data[input.dataset.task] = input.checked);
+            localStorage.setItem(storageKey, JSON.stringify(data));
+            if (Object.values(data).every(Boolean)) localStorage.setItem('pte-last-complete', todayKey);
+            updateProgress();
+        }
+
+        function saveProfile() {
+            const profile = {};
+            ['examDate', 'mockScore', 'weakSkill', 'dailyNote'].forEach(id => profile[id] = document.getElementById(id).value);
+            localStorage.setItem(profileKey, JSON.stringify(profile));
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const tasks = [...document.querySelectorAll('#taskList input[type="checkbox"]')];
+            const done = tasks.filter(input => input.checked).length;
+            const percent = Math.round((done / tasks.length) * 100);
+            document.getElementById('completionText').textContent = `${percent}%`;
+            document.getElementById('progressBar').style.width = `${percent}%`;
+            const score = Number(document.getElementById('mockScore').value || 0);
+            const weak = document.getElementById('weakSkill').value;
+            document.getElementById('todayAdvice').textContent = score && score < 42 ? `距离42分还差 ${42 - score} 分，优先补 ${weak}` : `保持节奏，继续强化 ${weak}`;
+            document.getElementById('streakText').textContent = calculateStreak();
+        }
+
+        function calculateStreak() {
+            let streak = 0;
+            const date = new Date();
+            while (true) {
+                const key = date.toISOString().slice(0, 10);
+                const data = JSON.parse(localStorage.getItem(`pte-checkin-${key}`) || '{}');
+                const completed = Object.keys(data).length && Object.values(data).every(Boolean);
+                if (!completed) break;
+                streak += 1;
+                date.setDate(date.getDate() - 1);
+            }
+            return streak;
+        }
+
+        function resetToday() {
+            localStorage.removeItem(storageKey);
+            localStorage.removeItem('pte-last-complete');
+            document.querySelectorAll('#taskList input[type="checkbox"]').forEach(input => input.checked = false);
+            updateProgress();
+        }
+
+        window.onload = () => {
+            document.querySelector('#pte-app .accordion-header').click();
+            loadTracker();
+        };
     </script>
 </body>
 </html>
