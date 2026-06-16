@@ -85,6 +85,22 @@
         textarea { min-height: 96px; resize: vertical; }
         .pill { display: inline-block; padding: .35rem .8rem; border-radius: 999px; background: #e6f3ff; color: var(--primary); font-weight: 700; margin: .25rem .25rem .25rem 0; }
         .danger-pill { background: #fee2e2; color: var(--danger); }
+        .resource-toolbar { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; margin: 1rem 0 1.5rem; }
+        .resource-link { display: inline-flex; align-items: center; gap: .45rem; background: #ecfdf5; color: #047857; border: 1px solid #bbf7d0; border-radius: 999px; padding: .7rem 1rem; font-weight: 800; text-decoration: none; }
+        .channel-tabs { display: flex; flex-wrap: wrap; gap: .7rem; margin: 1.2rem 0; }
+        .channel-tab { border: 1px solid #cbd5e1; background: white; color: var(--ink); border-radius: 999px; padding: .75rem 1.1rem; cursor: pointer; font-weight: 800; }
+        .channel-tab.active { background: var(--primary); border-color: var(--primary); color: white; }
+        .wfd-panel { display: none; }
+        .wfd-panel.active { display: block; }
+        .wfd-item { border: 1px solid #e2e8f0; border-radius: 16px; padding: 1.15rem; margin: 1rem 0; background: #fff; }
+        .wfd-prompt { display: flex; gap: .8rem; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+        .wfd-sentence { flex: 1 1 420px; font-weight: 800; color: var(--ink); }
+        .wfd-answer { min-height: 70px; margin-top: .9rem; }
+        .wfd-actions { display: flex; gap: .55rem; flex-wrap: wrap; }
+        .mini-btn { border: 0; border-radius: 999px; padding: .62rem .9rem; background: #e6f3ff; color: var(--primary); font-weight: 800; cursor: pointer; }
+        .mini-btn:hover { filter: brightness(.96); }
+        .hidden-examples .wfd-sentence { filter: blur(8px); user-select: none; }
+        .hidden-examples .wfd-sentence::after { content: "（已隐藏，点击上方开关显示例句）"; filter: none; display: block; color: #64748b; font-weight: 600; font-size: .95rem; margin-top: .25rem; }
     </style>
 </head>
 <body>
@@ -97,6 +113,7 @@
         <ul>
             <li><a href="#pte-app">🎯 PTE打卡</a></li>
             <li><a href="#pte-plan">⚡ 快速出分计划</a></li>
+            <li><a href="#wfd-bank">🎧 WFD资源库</a></li>
             <li><a href="#whv-intro">📘 WHV介绍</a></li>
             <li><a href="#aus">🇦🇺 Australia WHV</a></li>
             <li><a href="#nz">🇳🇿 New Zealand WHV</a></li>
@@ -162,6 +179,35 @@
                     </tbody>
                 </table>
                 <p><span class="pill">不要裸考</span><span class="pill">每天录音</span><span class="pill">固定模板</span><span class="pill danger-pill">少刷低收益题</span></p>
+            </div>
+        </div>
+
+
+        <div class="section" id="wfd-bank">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <span>🎧 PTE WFD项目资源库</span>
+            </div>
+            <div class="accordion-content">
+                <div class="highlight">
+                    <strong>资源库用途：</strong>把你等下提供的 WFD 中英文内容录入到这里后，可以直接背诵、默写、隐藏例句自测，并使用朗读按钮反复听例句发音。
+                </div>
+                <div class="resource-toolbar">
+                    <a class="resource-link" href="#wfd-bank">🔗 WFD资源库直达链接</a>
+                    <button class="mini-btn" type="button" onclick="toggleWfdExamples()" id="toggleExamplesBtn">🙈 一键隐藏例句</button>
+                    <button class="mini-btn" type="button" onclick="clearWfdAnswers()">🧹 清空默写区</button>
+                </div>
+                <div class="channel-tabs" role="tablist" aria-label="WFD语言通道">
+                    <button class="channel-tab active" type="button" onclick="switchWfdChannel('en')" id="tab-en">英文 WFD 通道</button>
+                    <button class="channel-tab" type="button" onclick="switchWfdChannel('zh')" id="tab-zh">中文辅助通道</button>
+                </div>
+                <div class="wfd-panel active" id="wfd-panel-en">
+                    <p><span class="pill">英文例句</span><span class="pill">逐句朗读</span><span class="pill">句子下方默写</span></p>
+                    <div id="wfdEnglishList"></div>
+                </div>
+                <div class="wfd-panel" id="wfd-panel-zh">
+                    <p><span class="pill">中文释义/提示</span><span class="pill">独立默写区</span><span class="pill">可替换为你提供的内容</span></p>
+                    <div id="wfdChineseList"></div>
+                </div>
             </div>
         </div>
 
@@ -273,6 +319,24 @@
         const todayKey = new Date().toISOString().slice(0, 10);
         const storageKey = `pte-checkin-${todayKey}`;
         const profileKey = 'pte-checkin-profile';
+        const wfdExamplesHiddenKey = 'pte-wfd-examples-hidden';
+        const wfdAnswersKey = 'pte-wfd-answers';
+        const wfdSentences = {
+            en: [
+                'The lecture will be held in the main auditorium.',
+                'Students should submit their assignments before Friday.',
+                'The library is located next to the science building.',
+                'Regular practice is essential for improving pronunciation.',
+                'Please check the timetable for the latest room changes.'
+            ],
+            zh: [
+                '讲座将在主礼堂举行。',
+                '学生应在星期五之前提交作业。',
+                '图书馆位于科学楼旁边。',
+                '规律练习对提高发音非常重要。',
+                '请查看时间表以获取最新教室变更。'
+            ]
+        };
 
         function loadTracker() {
             const saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
@@ -337,9 +401,80 @@
             updateProgress();
         }
 
+        function renderWfdBank() {
+            renderWfdList('en', 'wfdEnglishList', '写下你听到的英文句子，然后对照上方例句检查拼写、复数和标点。');
+            renderWfdList('zh', 'wfdChineseList', '写下中文释义、关键词或你的记忆提示。');
+            loadWfdAnswers();
+            const hidden = localStorage.getItem(wfdExamplesHiddenKey) === 'true';
+            document.getElementById('wfd-bank').classList.toggle('hidden-examples', hidden);
+            document.getElementById('toggleExamplesBtn').textContent = hidden ? '👀 显示例句' : '🙈 一键隐藏例句';
+        }
+
+        function renderWfdList(channel, containerId, placeholder) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = wfdSentences[channel].map((sentence, index) => `
+                <article class="wfd-item">
+                    <div class="wfd-prompt">
+                        <p class="wfd-sentence">${index + 1}. ${sentence}</p>
+                        <div class="wfd-actions">
+                            <button class="mini-btn" type="button" onclick="speakWfd('${channel}', ${index})">🔊 朗读例句</button>
+                        </div>
+                    </div>
+                    <textarea class="wfd-answer" data-wfd-answer="${channel}-${index}" placeholder="${placeholder}"></textarea>
+                </article>
+            `).join('');
+        }
+
+        function switchWfdChannel(channel) {
+            ['en', 'zh'].forEach(item => {
+                document.getElementById(`tab-${item}`).classList.toggle('active', item === channel);
+                document.getElementById(`wfd-panel-${item}`).classList.toggle('active', item === channel);
+            });
+        }
+
+        function toggleWfdExamples() {
+            const bank = document.getElementById('wfd-bank');
+            const hidden = !bank.classList.contains('hidden-examples');
+            bank.classList.toggle('hidden-examples', hidden);
+            localStorage.setItem(wfdExamplesHiddenKey, hidden);
+            document.getElementById('toggleExamplesBtn').textContent = hidden ? '👀 显示例句' : '🙈 一键隐藏例句';
+        }
+
+        function speakWfd(channel, index) {
+            if (!('speechSynthesis' in window)) {
+                alert('当前浏览器不支持朗读功能，请换用 Chrome、Edge 或 Safari。');
+                return;
+            }
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(wfdSentences[channel][index]);
+            utterance.lang = channel === 'en' ? 'en-US' : 'zh-CN';
+            utterance.rate = channel === 'en' ? 0.86 : 0.92;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function loadWfdAnswers() {
+            const saved = JSON.parse(localStorage.getItem(wfdAnswersKey) || '{}');
+            document.querySelectorAll('.wfd-answer').forEach(answer => {
+                answer.value = saved[answer.dataset.wfdAnswer] || '';
+                answer.addEventListener('input', saveWfdAnswers);
+            });
+        }
+
+        function saveWfdAnswers() {
+            const data = {};
+            document.querySelectorAll('.wfd-answer').forEach(answer => data[answer.dataset.wfdAnswer] = answer.value);
+            localStorage.setItem(wfdAnswersKey, JSON.stringify(data));
+        }
+
+        function clearWfdAnswers() {
+            document.querySelectorAll('.wfd-answer').forEach(answer => answer.value = '');
+            localStorage.removeItem(wfdAnswersKey);
+        }
+
         window.onload = () => {
             document.querySelector('#pte-app .accordion-header').click();
             loadTracker();
+            renderWfdBank();
         };
     </script>
 </body>
